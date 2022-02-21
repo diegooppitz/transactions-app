@@ -32,7 +32,6 @@ export default {
   },
   mounted() {
     this.fetchData();
-    console.log(formatNumber(100));
   },
 
   methods: {
