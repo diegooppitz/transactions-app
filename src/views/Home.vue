@@ -12,7 +12,7 @@
           <p class="item col-lg">{{element.title}}</p>
           <p class="item col-lg">{{ element.description }}</p>
           <p class="item col-sm">{{ element.status }}</p>
-          <p class="item col-sm">{{ element.amount }}</p>
+          <p class="item col-sm">{{ formatAmount(element.amount) }}</p>
       </div>
     </div>
   </div>
@@ -21,6 +21,7 @@
 <script>
 
 import { getTransactions } from '@/services'
+import { formatNumber } from '@/helpers/numbers'
 
 export default {
   name: 'Home',
@@ -30,11 +31,22 @@ export default {
     }
   },
   mounted() {
-    getTransactions().then(res => {
-      if (res.status != 200) return;
-      console.log(res.data);
-      this.transactionsData = res?.data
-    })
+    this.fetchData();
+    console.log(formatNumber(100));
+  },
+
+  methods: {
+    fetchData() {
+      getTransactions().then(res => {
+        if (!res || res.status != 200) return;
+        this.transactionsData = res?.data
+      });
+    },
+
+    // Here, i preferred to use a helper, because in the case of a large product it becomes scalable
+    formatAmount(amount) {
+      return formatNumber(amount);
+    }
   }
 }
 </script>
@@ -103,14 +115,14 @@ export default {
 }
 
 .col-lg {
-    width: 25%;
+    width: 30%;
 }
 
 .col-md {
-    width: 20%;
+    width: 25%;
 }
 
 .col-sm {
-    width: 15%;
+    width: 20%;
 }
 </style>
