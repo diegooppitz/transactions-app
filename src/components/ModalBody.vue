@@ -1,14 +1,6 @@
 <template>
   <div class="modal-body">
-    <div class="modal-bar-container">
-      <div class="modal-bar-content"></div>
-
-      <div class="modal-bar-texts">
-        <p>Solicitada</p>
-        <p>Processando</p>
-        <p>Concluída</p>
-      </div>
-    </div>
+    <chart-bar />
 
     <div class="modal-info">
       <h4>Transferindo de</h4>
@@ -41,8 +33,13 @@
 
   import { formatNumber } from '@/helpers/numbers';
 
+  import ChartBar from '@/components/ChartBar';
+
   export default {
     name: "ModalBody",
+    components: {
+      ChartBar,
+    },
     computed: {
       ...mapState(['modalData']),
     },
@@ -58,21 +55,6 @@
   .modal-body {
     padding: 35px 0;
     width: 100%;
-
-    .modal-bar-container {
-      width: 70%;
-      margin: 0 auto 20px auto;
-    }
-
-    .modal-bar-content {
-      height: 30px;
-      background-color: #ccc;
-    }
-
-    .modal-bar-texts {
-      display: flex;
-      justify-content: space-between;
-    }
 
     .modal-info {
       width: 70%;
