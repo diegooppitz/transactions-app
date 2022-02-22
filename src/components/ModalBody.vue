@@ -15,8 +15,10 @@
       <span></span>
 
       <div class="modal-info-texts">
-        <p>banco</p>
-        <p>R$ 1800,00</p>
+        <template v-if="modalData">
+          <p>{{ modalData.from }}</p>
+          <p>{{ formatAmount(modalData.amount) }}</p>
+        </template>
       </div>
     </div>
 
@@ -25,16 +27,30 @@
       <span></span>
 
       <div class="modal-info-texts">
-        <p>warren</p>
-        <p>R$ 1800,00</p>
+        <template v-if="modalData">
+          <p>{{ modalData.to }}</p>
+          <p>{{ formatAmount(modalData.amount) }}</p>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex';
+
+  import { formatNumber } from '@/helpers/numbers';
+
   export default {
     name: "ModalBody",
+    computed: {
+      ...mapState(['modalData']),
+    },
+    methods: {
+      formatAmount(amount) {
+        return formatNumber(amount);
+      },
+    },
   }
 </script>
 

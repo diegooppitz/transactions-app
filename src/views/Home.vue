@@ -12,14 +12,14 @@
       </select>
     </div>
 
-    <div class="transactions-wrapper">
-      <div class="transactions-subtitles">
+    <div class="transaction-wrapper">
+      <div class="transaction-subtitles">
           <p class="item-subtitle col-lg">Título</p>
           <p class="item-subtitle col-lg">Descrição</p>
           <p class="item-subtitle col-sm">Status</p>
           <p class="item-subtitle col-sm">Valor</p>
       </div>
-      <div v-for="(element, index) in data" :key="index" class="line">
+      <div v-for="(element, index) in data" :key="index" class="transaction-line" @click="clickModal(element)">
           <p class="item col-lg">{{ element.title }}</p>
           <p class="item col-lg">{{ element.description }}</p>
           <p class="item col-sm">{{ formatStatus(element.status) }}</p>
@@ -27,16 +27,18 @@
       </div>
     </div>
 
-    <modal />
+    <modal v-if="modalActive" />
   </div>
 </template>
 
 <script>
 
-import { getTransactions } from '@/services'
-import { formatNumber } from '@/helpers/numbers'
+import { mapState, mapActions } from 'vuex';
 
-import Modal from '@/components/Modal'
+import { getTransactions } from '@/services';
+import { formatNumber } from '@/helpers/numbers';
+
+import Modal from '@/components/Modal';
 
 export default {
   name: 'Home',
@@ -47,7 +49,6 @@ export default {
     return {
       transactionsData: [],
       data: [],
-
       searchTerm: null,
       status: 'status',
     }
@@ -62,12 +63,18 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState(['modalActive']),
+  },
+
   methods: {
+    ...mapActions(['openModal']),
+
     fetchData() {
       getTransactions().then(res => {
         if (!res || res.status != 200) return;
-        this.transactionsData = res?.data
-        this.data = res?.data
+        this.transactionsData = res?.data;
+        this.data = res?.data;
       });
     },
 
@@ -111,6 +118,10 @@ export default {
       if (this.status === 'status' || !this.data) return;
       this.data = this.data.filter(item => item.status === this.status);
     },
+
+    clickModal(transaction) {
+      this.openModal(transaction);
+    },
   }
 }
 </script>
@@ -129,20 +140,25 @@ export default {
     }
 }
 
-.transactions-wrapper {
+.transaction-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 70%;
     margin: 0 auto;
 
-    .line,
-    .transactions-subtitles {
+    .transaction-line {
+      cursor: pointer;
+      margin: 18px 0;
+    }
+
+    .transaction-line,
+    .transaction-subtitles {
       display: flex;
       justify-content: center;
     }
 
-    .transactions-subtitles {
+    .transaction-subtitles {
       margin: 30px 0 5px 0;
 
       p {
@@ -152,12 +168,11 @@ export default {
 }
 
 .item {
-    font-size: 18px;
-    margin: 18px 0;
+  font-size: 18px;
+  margin: 0;
 }
 
 .item a,
-.create-vaccine,
 .back-btn {
     margin: 0 8px;
     border-radius: 25px;

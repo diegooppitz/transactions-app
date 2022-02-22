@@ -1,13 +1,23 @@
 <template>
   <div class="modal-header">
-    <h3>Título</h3>
-    <img src="../assets/close.svg" alt="">
+    <template v-if="modalData">
+      <h3>{{ modalData.title }}</h3>
+      <img src="../assets/close.svg" @click="closeModal()">
+    </template>
   </div>
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
+
   export default {
     name: "ModalHeader",
+    computed: {
+      ...mapState(['modalData']),
+    },
+    methods: {
+      ...mapActions(['closeModal']),
+    },
   }
 </script>
 
