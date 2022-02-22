@@ -26,6 +26,8 @@
           <p class="item col-sm">{{ formatAmount(element.amount) }}</p>
       </div>
     </div>
+
+    <modal />
   </div>
 </template>
 
@@ -34,8 +36,13 @@
 import { getTransactions } from '@/services'
 import { formatNumber } from '@/helpers/numbers'
 
+import Modal from '@/components/Modal'
+
 export default {
   name: 'Home',
+  components: {
+    Modal,
+  },
   data() {
     return {
       transactionsData: [],
@@ -110,6 +117,7 @@ export default {
 
 <style lang="scss" scoped>
 .transactions {
+    position: relative;
     border-radius: 20px;
     padding: 50px;
     margin: 15px;
