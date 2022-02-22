@@ -1,6 +1,17 @@
 <template>
   <div class="transactions">
     <h1>Transações</h1>
+
+    <div class="transactions-header">
+      <input v-model="term" type="text" placeholder="Pesquise pelo título" @input="filterStatus()">
+      <select v-model="status">
+        <option value="status">Todos os status</option>
+        <option value="created">Solicitada</option>
+        <option value="processing">Processando</option>
+        <option value="processed">Concluída</option>
+      </select>
+    </div>
+
     <div class="transactions-wrapper">
       <div class="transactions-subtitles">
           <p class="item-subtitle col-lg">Título</p>
@@ -8,10 +19,10 @@
           <p class="item-subtitle col-sm">Status</p>
           <p class="item-subtitle col-sm">Valor</p>
       </div>
-      <div v-for="(element, index) in transactionsData" :key="index" class="line">
-          <p class="item col-lg">{{element.title}}</p>
+      <div v-for="(element, index) in data" :key="index" class="line">
+          <p class="item col-lg">{{ element.title }}</p>
           <p class="item col-lg">{{ element.description }}</p>
-          <p class="item col-sm">{{ element.status }}</p>
+          <p class="item col-sm">{{ formatStatus(element.status) }}</p>
           <p class="item col-sm">{{ formatAmount(element.amount) }}</p>
       </div>
     </div>
@@ -28,10 +39,20 @@ export default {
   data() {
     return {
       transactionsData: [],
+      data: [],
+
+      searchTerm: null,
+      status: 'status',
     }
   },
   mounted() {
     this.fetchData();
+  },
+
+  watch: {
+    status() {
+      this.filterStatus();
+    }
   },
 
   methods: {
@@ -39,13 +60,50 @@ export default {
       getTransactions().then(res => {
         if (!res || res.status != 200) return;
         this.transactionsData = res?.data
+        this.data = res?.data
       });
     },
 
     // Here, i preferred to use a helper, because in the case of a large product it becomes scalable
     formatAmount(amount) {
       return formatNumber(amount);
-    }
+    },
+
+    formatStatus(status) {
+      switch(status) {
+        case 'created':
+          return 'Solicitada';
+
+        case 'processing':
+          return 'Processando';
+
+        case 'processed':
+          return 'Concluída';
+
+        default:
+          return '-';
+      }
+    },
+
+
+    filterTerm(term) {
+      if (term) {
+        return this.data.filter(item => {
+          return term.toLowerCase().split(" ").every(el => item.title.toLowerCase().includes(el));
+        });
+      } else return this.data;
+    },
+
+    filterStatus() {
+      // reset data
+      this.data = this.transactionsData;
+
+      // search filter
+      this.data = this.filterTerm(this.term);
+
+      if (this.status === 'status' || !this.data) return;
+      this.data = this.data.filter(item => item.status === this.status);
+    },
   }
 }
 </script>
