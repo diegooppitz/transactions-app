@@ -32,14 +32,14 @@
 <style lang="scss" scoped>
   .modal {
     position: fixed;
-    overflow: none;
+    overflow: hidden;
     outline: none;
     width: 100vw;
     height: 100vh;
     top: 0;
     left: 0;
     z-index: 1;
-    padding: 50px 0;
+    padding: 0;
 
     &::after {
       content: '';
@@ -53,14 +53,21 @@
     }
 
     .modal__container {
-      position: relative;
+      position: absolute;
       height: auto;
-      margin: 10% auto 0 auto;
-      background-color: #fff;
+      margin: 0 auto;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      top: 50%;
+      width: 55%;
       padding: 15px 0;
-      max-width: 55%;
       border-radius: 0 0 10px 10px;
+      background-color: #fff;
       box-shadow: 0 25px 60px 0 rgba(0, 0, 0, 0.07), 0 0 20px 0 rgba(0, 0, 0, 0.3);
+
+      @media screen and (max-width: 768px) {
+        width: 90%;
+      }
     }
   }
 </style>

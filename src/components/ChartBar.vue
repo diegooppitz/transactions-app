@@ -44,6 +44,11 @@
     width: 70%;
     margin: 0 auto 20px auto;
 
+    @media screen and (max-width: 768px) {
+      width: 90%;
+      margin-bottom: 10px;
+    }
+
     .cb__content {
       height: 30px;
       background-color: #ccc;
@@ -65,6 +70,12 @@
     .cb__texts {
       display: flex;
       justify-content: space-between;
+
+      p {
+        @media screen and (max-width: 768px) {
+          font-size: 13px;
+        }
+      }
     }
   }
 </style>
