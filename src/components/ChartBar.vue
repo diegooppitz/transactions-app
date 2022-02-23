@@ -1,9 +1,9 @@
 <template>
   <div class="chart-bar">
-    <div class="chart-bar-content" :class="checkStatus()">
+    <div class="cb__content" :class="checkStatus()">
     </div>
 
-    <div class="chart-bar-texts">
+    <div class="cb__texts">
       <p>Solicitada</p>
       <p>Processando</p>
       <p>Concluída</p>
@@ -44,7 +44,7 @@
     width: 70%;
     margin: 0 auto 20px auto;
 
-    .chart-bar-content {
+    .cb__content {
       height: 30px;
       background-color: #ccc;
       position: relative;
@@ -62,7 +62,7 @@
       }
     }
 
-    .chart-bar-texts {
+    .cb__texts {
       display: flex;
       justify-content: space-between;
     }

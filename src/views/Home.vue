@@ -1,8 +1,8 @@
 <template>
-  <div class="transactions">
+  <div class="transactions-table">
     <h1>Transações</h1>
 
-    <div class="transactions-header">
+    <div class="tt__header">
       <input v-model="term" type="text" placeholder="Pesquise pelo título" @input="filterStatus()">
       <select v-model="status">
         <option value="status">Todos os status</option>
@@ -12,18 +12,18 @@
       </select>
     </div>
 
-    <div class="transaction-wrapper">
-      <div class="transaction-subtitles">
-          <p class="item-subtitle col-lg">Título</p>
-          <p class="item-subtitle col-lg">Descrição</p>
-          <p class="item-subtitle col-sm">Status</p>
-          <p class="item-subtitle col-sm">Valor</p>
+    <div class="tt__wrapper">
+      <div class="tt__titles">
+          <p class="tt__item-title col-lg">Título</p>
+          <p class="tt__item-title col-lg">Descrição</p>
+          <p class="tt__item-title col-sm">Status</p>
+          <p class="tt__item-title col-sm">Valor</p>
       </div>
-      <div v-for="(element, index) in data" :key="index" class="transaction-line" @click="clickModal(element)">
-          <p class="item col-lg">{{ element.title }}</p>
-          <p class="item col-lg">{{ element.description }}</p>
-          <p class="item col-sm">{{ formatStatus(element.status) }}</p>
-          <p class="item col-sm">{{ formatAmount(element.amount) }}</p>
+      <div v-for="(element, index) in data" :key="index" class="tt__line" @click="clickModal(element)">
+          <p class="tt__item col-lg">{{ element.title }}</p>
+          <p class="tt__item col-lg">{{ element.description }}</p>
+          <p class="tt__item col-sm">{{ formatStatus(element.status) }}</p>
+          <p class="tt__item col-sm">{{ formatAmount(element.amount) }}</p>
       </div>
     </div>
 
@@ -127,71 +127,77 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.transactions {
-    position: relative;
-    border-radius: 20px;
-    padding: 50px;
-    margin: 15px;
-    min-height: 100vh;
-    height: auto;
+.transactions-table {
+  position: relative;
+  border-radius: 20px;
+  padding: 50px;
+  margin: 15px;
+  min-height: 100vh;
+  height: auto;
 
-    h1 {
-      text-align: center;
+  h1 {
+    text-align: center;
+  }
+
+  .tt__header {
+    input {
+      height: 35px;
+      width: 250px;
+      padding: 5px 10px;
+      outline: none;
+      box-sizing: border-box;
+      border-radius: 5px;
+      border: 1px #ccc solid;
     }
-}
 
-.transaction-wrapper {
+    select {
+      height: 35px;
+      width: 200px;
+      box-sizing: border-box;
+      outline: none;
+      border: solid 1px #ccc;
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-left: 25px;
+    }
+  }
+
+  .tt__wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 70%;
     margin: 0 auto;
 
-    .transaction-line {
-      cursor: pointer;
-      margin: 18px 0;
-    }
-
-    .transaction-line,
-    .transaction-subtitles {
+    .tt__line,
+    .tt__titles {
       display: flex;
       justify-content: center;
     }
 
-    .transaction-subtitles {
+    .tt__line {
+      cursor: pointer;
+      margin: 18px 0;
+    }
+
+    .tt__titles {
       margin: 30px 0 5px 0;
 
       p {
         font-weight: 600;
       }
     }
-}
 
-.item {
-  font-size: 18px;
-  margin: 0;
-}
+    .tt__item {
+      font-size: 18px;
+      margin: 0;
+    }
 
-.item a,
-.back-btn {
-    margin: 0 8px;
-    border-radius: 25px;
-    border: none;
-    width: 65px;
-    height: 30px;
-    font-size: 18px;
-    cursor: pointer;
-    text-decoration: none;
-    color: #0000FF;
-}
-
-.item a:hover,
-.back-btn:hover {
-    opacity: 0.8;
-}
-
-.item-subtitle {
-    font-size: 20px;
+    .tt__item-title {
+        font-size: 20px;
+    }
+  }
 }
 
 .col-lg {

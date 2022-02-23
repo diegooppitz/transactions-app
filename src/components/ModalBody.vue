@@ -2,11 +2,11 @@
   <div class="modal-body">
     <chart-bar />
 
-    <div class="modal-info">
+    <div class="mb__info">
       <h4>Transferindo de</h4>
       <span></span>
 
-      <div class="modal-info-texts">
+      <div class="mb__info-texts">
         <template v-if="modalData">
           <p>{{ modalData.from }}</p>
           <p>{{ formatAmount(modalData.amount) }}</p>
@@ -14,11 +14,11 @@
       </div>
     </div>
 
-    <div class="modal-info">
+    <div class="mb__info">
       <h4>Para</h4>
       <span></span>
 
-      <div class="modal-info-texts">
+      <div class="mb__info-texts">
         <template v-if="modalData">
           <p>{{ modalData.to }}</p>
           <p>{{ formatAmount(modalData.amount) }}</p>
@@ -56,7 +56,7 @@
     padding: 35px 0;
     width: 100%;
 
-    .modal-info {
+    .mb__info {
       width: 70%;
       margin: 0 auto;
       display: flex;
@@ -80,7 +80,7 @@
         text-align: left;
       }
 
-      .modal-info-texts {
+      .mb__info-texts {
         display: flex;
         justify-content: space-between;
       }
