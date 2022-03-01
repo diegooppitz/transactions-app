@@ -1,8 +1,8 @@
 <template>
-  <div class="transactions">
+  <div class="transactions-table">
     <h1>Transações</h1>
 
-    <div class="transactions-header">
+    <div class="tt__header">
       <input v-model="term" type="text" placeholder="Pesquise pelo título" @input="filterStatus()">
       <select v-model="status">
         <option value="status">Todos os status</option>
@@ -12,174 +12,242 @@
       </select>
     </div>
 
-    <div class="transactions-wrapper">
-      <div class="transactions-subtitles">
-          <p class="item-subtitle col-lg">Título</p>
-          <p class="item-subtitle col-lg">Descrição</p>
-          <p class="item-subtitle col-sm">Status</p>
-          <p class="item-subtitle col-sm">Valor</p>
+    <div class="tt__wrapper">
+      <div class="tt__titles">
+        <p class="tt__item-title col-lg">Título</p>
+        <p class="tt__item-title tt__item-desc col-lg">Descrição</p>
+        <p class="tt__item-title col-sm">Status</p>
+        <p class="tt__item-title col-sm">Valor</p>
       </div>
-      <div v-for="(element, index) in data" :key="index" class="line">
-          <p class="item col-lg">{{ element.title }}</p>
-          <p class="item col-lg">{{ element.description }}</p>
-          <p class="item col-sm">{{ formatStatus(element.status) }}</p>
-          <p class="item col-sm">{{ formatAmount(element.amount) }}</p>
+      <div v-for="(element, index) in data" :key="index" class="tt__line" @click="openModal(element)">
+        <p class="tt__item col-lg">{{ element.title }}</p>
+        <p class="tt__item tt__item-desc col-lg">{{ element.description }}</p>
+        <p class="tt__item col-sm">{{ formatStatus(element.status) }}</p>
+        <p class="tt__item col-sm">{{ formatAmount(element.amount) }}</p>
       </div>
     </div>
+
+    <modal v-show="modalActive" />
   </div>
 </template>
 
 <script>
+  // libs
+  import { useStore } from 'vuex';
+  import { computed } from 'vue';
 
-import { getTransactions } from '@/services'
-import { formatNumber } from '@/helpers/numbers'
+  // services
+  import { getTransactions } from '@/services';
 
-export default {
-  name: 'Home',
-  data() {
-    return {
-      transactionsData: [],
-      data: [],
+  // helpers
+  import { formatNumber } from '@/helpers/numbers';
 
-      searchTerm: null,
-      status: 'status',
-    }
-  },
-  mounted() {
-    this.fetchData();
-  },
+  // components
+  import Modal from '@/components/Modal';
 
-  watch: {
-    status() {
-      this.filterStatus();
-    }
-  },
-
-  methods: {
-    fetchData() {
-      getTransactions().then(res => {
-        if (!res || res.status != 200) return;
-        this.transactionsData = res?.data
-        this.data = res?.data
-      });
+  export default {
+    name: 'Home',
+    components: {
+      Modal,
+    },
+    data() {
+      return {
+        transactionsData: [],
+        data: [],
+        searchTerm: null,
+        status: 'status',
+      }
+    },
+    mounted() {
+      this.fetchData();
     },
 
-    // Here, i preferred to use a helper, because in the case of a large product it becomes scalable
-    formatAmount(amount) {
-      return formatNumber(amount);
+    setup() {
+      const store = useStore()
+      const modalActive = computed(() => store.state.modalActive);
+      const openModal = (data) => store.dispatch('openModal', data);
+
+      return { openModal, modalActive }
     },
 
-    formatStatus(status) {
-      switch(status) {
-        case 'created':
-          return 'Solicitada';
-
-        case 'processing':
-          return 'Processando';
-
-        case 'processed':
-          return 'Concluída';
-
-        default:
-          return '-';
+    watch: {
+      status() {
+        this.filterStatus();
       }
     },
 
-
-    filterTerm(term) {
-      if (term) {
-        return this.data.filter(item => {
-          return term.toLowerCase().split(" ").every(el => item.title.toLowerCase().includes(el));
+    methods: {
+      fetchData() {
+        getTransactions().then(res => {
+          if (!res || res.status != 200) return;
+          this.transactionsData = res?.data;
+          this.data = res?.data;
         });
-      } else return this.data;
-    },
+      },
 
-    filterStatus() {
-      // reset data
-      this.data = this.transactionsData;
+      // Here, i preferred to use a helper, because in the case of a large product it becomes scalable
+      formatAmount(amount) {
+        return formatNumber(amount);
+      },
 
-      // search filter
-      this.data = this.filterTerm(this.term);
+      formatStatus(status) {
+        switch(status) {
+          case 'created':
+            return 'Solicitada';
 
-      if (this.status === 'status' || !this.data) return;
-      this.data = this.data.filter(item => item.status === this.status);
-    },
+          case 'processing':
+            return 'Processando';
+
+          case 'processed':
+            return 'Concluída';
+
+          default:
+            return '-';
+        }
+      },
+
+
+      filterTerm(term) {
+        if (term) {
+          return this.data.filter(item => {
+            return term.toLowerCase().split(" ").every(el => item.title.toLowerCase().includes(el));
+          });
+        } else return this.data;
+      },
+
+      filterStatus() {
+        // reset data
+        this.data = this.transactionsData;
+
+        // search filter
+        this.data = this.filterTerm(this.term);
+
+        if (this.status === 'status' || !this.data) return;
+        this.data = this.data.filter(item => item.status === this.status);
+      },
+
+      clickModal(transaction) {
+        this.openModal(transaction);
+      },
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-.transactions {
+  .transactions-table {
+    position: relative;
     border-radius: 20px;
     padding: 50px;
     margin: 15px;
+    width: 100%;
     min-height: 100vh;
     height: auto;
+
+    @media screen and (max-width: 768px) {
+      padding: 5px 0;
+      margin: 0;
+    }
 
     h1 {
       text-align: center;
     }
-}
 
-.transactions-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 70%;
-    margin: 0 auto;
+    .tt__header {
+      input {
+        width: 250px;
+      }
 
-    .line,
-    .transactions-subtitles {
-      display: flex;
-      justify-content: center;
-    }
+      select {
+        background-color: #fff;
+        margin-left: 25px;
+        width: 200px;
+      }
 
-    .transactions-subtitles {
-      margin: 30px 0 5px 0;
+      input,
+      select {
+        height: 35px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        outline: none;
+        box-sizing: border-box;
+        border: solid 1px #ccc;
 
-      p {
-        font-weight: 600;
+        @media screen and (max-width: 768px) {
+          width: 80%;
+          margin: 7px auto;
+        }
       }
     }
-}
 
-.item {
-    font-size: 18px;
-    margin: 18px 0;
-}
+    .tt__wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 70%;
+      margin: 0 auto;
 
-.item a,
-.create-vaccine,
-.back-btn {
-    margin: 0 8px;
-    border-radius: 25px;
-    border: none;
-    width: 65px;
-    height: 30px;
-    font-size: 18px;
-    cursor: pointer;
-    text-decoration: none;
-    color: #0000FF;
-}
+      @media screen and (max-width: 768px) {
+        width: 95%;
+      }
 
-.item a:hover,
-.back-btn:hover {
-    opacity: 0.8;
-}
+      .tt__line,
+      .tt__titles {
+        display: flex;
+        justify-content: center;
+      }
 
-.item-subtitle {
-    font-size: 20px;
-}
+      .tt__line {
+        cursor: pointer;
+        margin: 18px 0;
+      }
 
-.col-lg {
+      .tt__titles {
+        margin: 30px 0 5px 0;
+
+        p {
+          font-weight: 600;
+        }
+      }
+
+      .tt__item-title {
+        font-size: 20px;
+
+        @media screen and (max-width: 768px) {
+          font-size: 16px;
+        }
+
+      }
+
+      .tt__item {
+        font-size: 18px;
+        margin: 0;
+
+        @media screen and (max-width: 768px) {
+          font-size: 13px;
+        }
+      }
+
+      .tt__item-desc {
+        @media screen and (max-width: 768px) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .col-lg {
     width: 30%;
-}
 
-.col-md {
-    width: 25%;
-}
+    @media screen and (max-width: 768px) {
+      width: 32%;
+    }
+  }
 
-.col-sm {
+  .col-sm {
     width: 20%;
-}
+
+    @media screen and (max-width: 768px) {
+      width: 32%;
+    }
+  }
 </style>
