@@ -23,7 +23,7 @@ describe('Modal', () => {
     })
   })
 
-  test('check modal class, components and call closeModal function', async () => {
+  test('check modal class and components', async () => {
     const wrapper = mount(Modal, {
       global: { plugins: [store] }
     })
@@ -35,6 +35,12 @@ describe('Modal', () => {
 
     const modalBody = wrapper.findComponent(ModalBody);
     expect(modalBody.exists()).toBe(true);
+  })
+
+  test('call closeModal function', async () => {
+    const wrapper = mount(Modal, {
+      global: { plugins: [store] }
+    })
 
     const closeModal = wrapper.find('.modal');
     await closeModal.trigger('click');

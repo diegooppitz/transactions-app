@@ -29,11 +29,14 @@
 </template>
 
 <script>
+  // libs
   import { computed } from 'vue';
   import { useStore } from 'vuex';
 
+  // helpers
   import { formatNumber } from '@/helpers/numbers';
 
+  // components
   import ChartBar from '@/components/ChartBar';
 
   export default {

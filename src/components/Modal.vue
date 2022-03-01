@@ -8,8 +8,10 @@
 </template>
 
 <script>
+  // libs
   import { useStore } from 'vuex';
 
+  // components
   import ModalHeader from '@/components/ModalHeader'
   import ModalBody from '@/components/ModalBody'
 

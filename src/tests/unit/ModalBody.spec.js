@@ -20,7 +20,7 @@ describe('ModalBody', () => {
     })
   })
 
-  test('check modal-body class, subtitles, components and test formatAmount function', async () => {
+  test('check modal-body class, subtitles and components', async () => {
     const wrapper = mount(ModalBody, {
       global: { plugins: [store] }
     })
@@ -30,6 +30,12 @@ describe('ModalBody', () => {
 
     const chartBar = wrapper.findComponent(ChartBar);
     expect(chartBar.exists()).toBe(true);
+  })
+
+  test('call formatAmount function', async () => {
+    const wrapper = mount(ModalBody, {
+      global: { plugins: [store] }
+    })
 
     const formatAmount = wrapper.vm.formatAmount(500);
     expect(formatAmount).toBe('R$ 500,00');

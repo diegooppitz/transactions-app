@@ -22,13 +22,19 @@ describe('ModalHeader', () => {
     })
   })
 
-  test('check modal-header class, subtitle and call closeModal function', async () => {
+  test('check modal-header class and subtitle', async () => {
     const wrapper = mount(ModalHeader, {
       global: { plugins: [store] }
     })
 
     expect(wrapper.attributes('class')).toBe('modal-header');
     expect(wrapper.find('h3').exists()).toBe(true);
+  })
+
+  test('call closeModal function', async () => {
+    const wrapper = mount(ModalHeader, {
+      global: { plugins: [store] }
+    })
 
     const closeImg = wrapper.find('img');
     await closeImg.trigger('click');
