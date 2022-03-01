@@ -29,7 +29,8 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+  import { computed } from 'vue';
+  import { useStore } from 'vuex';
 
   import { formatNumber } from '@/helpers/numbers';
 
@@ -40,8 +41,11 @@
     components: {
       ChartBar,
     },
-    computed: {
-      ...mapState(['modalData']),
+    setup() {
+      const store = useStore()
+      const modalData = computed(() => store.state.modalData);
+
+      return { modalData }
     },
     methods: {
       formatAmount(amount) {

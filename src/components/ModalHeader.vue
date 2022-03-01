@@ -8,15 +8,18 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex';
+  import { computed } from 'vue';
+  import { useStore } from 'vuex';
 
   export default {
     name: "ModalHeader",
-    computed: {
-      ...mapState(['modalData']),
-    },
-    methods: {
-      ...mapActions(['closeModal']),
+
+    setup() {
+      const store = useStore()
+      const modalData = computed(() => store.state.modalData);
+      const closeModal = () => store.dispatch('closeModal')
+
+      return { closeModal, modalData }
     },
   }
 </script>

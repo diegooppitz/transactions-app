@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { useStore } from 'vuex';
 
   import ModalHeader from '@/components/ModalHeader'
   import ModalBody from '@/components/ModalBody'
@@ -20,8 +20,14 @@
       ModalBody,
     },
 
+    setup() {
+      const store = useStore()
+      const closeModal = () => store.dispatch('closeModal')
+
+      return { closeModal }
+    },
+
     methods: {
-      ...mapActions(['closeModal']),
       clickCallback(event) {
          if (event.target.classList[0] === 'modal') this.closeModal();
       }

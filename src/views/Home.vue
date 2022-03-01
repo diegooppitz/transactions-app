@@ -19,7 +19,7 @@
         <p class="tt__item-title col-sm">Status</p>
         <p class="tt__item-title col-sm">Valor</p>
       </div>
-      <div v-for="(element, index) in data" :key="index" class="tt__line" @click="clickModal(element)">
+      <div v-for="(element, index) in data" :key="index" class="tt__line" @click="openModal(element)">
         <p class="tt__item col-lg">{{ element.title }}</p>
         <p class="tt__item tt__item-desc col-lg">{{ element.description }}</p>
         <p class="tt__item col-sm">{{ formatStatus(element.status) }}</p>
@@ -32,8 +32,8 @@
 </template>
 
 <script>
-
-import { mapState, mapActions } from 'vuex';
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 
 import { getTransactions } from '@/services';
 import { formatNumber } from '@/helpers/numbers';
@@ -57,19 +57,21 @@ export default {
     this.fetchData();
   },
 
+  setup() {
+    const store = useStore()
+    const modalActive = computed(() => store.state.modalActive);
+    const openModal = (data) => store.dispatch('openModal', data);
+
+    return { openModal, modalActive }
+  },
+
   watch: {
     status() {
       this.filterStatus();
     }
   },
 
-  computed: {
-    ...mapState(['modalActive']),
-  },
-
   methods: {
-    ...mapActions(['openModal']),
-
     fetchData() {
       getTransactions().then(res => {
         if (!res || res.status != 200) return;
