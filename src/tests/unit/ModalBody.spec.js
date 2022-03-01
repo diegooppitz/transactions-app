@@ -1,17 +1,15 @@
+// libs
 import { mount } from "@vue/test-utils";
 import { createStore } from 'vuex';
-import ModalBody from '@/components/ModalBody';
 
-const stateMock = {
-  "id":"5f89f9f257fe42957bf6dbfd",
-  "title":"Resgate",
-  "description":"et labore proident aute nulla",
-  "status":"created",
-  "amount":2078.66,
-  "date":"2020-07-01",
-  "from":"Aposentadoria",
-  "to":"Conta Warren"
-}
+// helpers
+import { stateMockFn } from '@/helpers/stateMock';
+
+// components
+import ModalBody from '@/components/ModalBody';
+import ChartBar from '@/components/ChartBar';
+
+const stateMock = stateMockFn();
 
 let store;
 
@@ -22,13 +20,16 @@ describe('ModalBody', () => {
     })
   })
 
-  test('check modal-body class, subtitles and test formatAmount function', async () => {
+  test('check modal-body class, subtitles, components and test formatAmount function', async () => {
     const wrapper = mount(ModalBody, {
       global: { plugins: [store] }
     })
 
     expect(wrapper.attributes('class')).toBe('modal-body');
     expect(wrapper.find('h4').exists()).toBe(true);
+
+    const chartBar = wrapper.findComponent(ChartBar);
+    expect(chartBar.exists()).toBe(true);
 
     const formatAmount = wrapper.vm.formatAmount(500);
     expect(formatAmount).toBe('R$ 500,00');
