@@ -27,7 +27,7 @@ describe('Home', () => {
     })
   })
 
-  test('check home class, components and call openModal function', async () => {
+  test('check home class', async () => {
     const wrapper = mount(Home, {
       global: { plugins: [store] }
     })
