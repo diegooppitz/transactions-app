@@ -54,7 +54,7 @@
       return {
         transactionsData: [],
         data: [],
-        searchTerm: null,
+        term: null,
         status: 'status',
       }
     },
