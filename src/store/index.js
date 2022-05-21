@@ -38,6 +38,7 @@ export default createStore({
     changeTerm({ commit }, payload) {
       const termValue = payload?.target?.value;
       if (termValue) commit("SET_FILTER_TERM", termValue);
+      else commit("SET_FILTER_TERM", "");
     },
 
     openModal({ commit }, data) {

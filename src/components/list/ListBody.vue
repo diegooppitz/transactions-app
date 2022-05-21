@@ -45,9 +45,11 @@ export default {
     return { openModal, status, term };
   },
   watch: {
+    // when status state change, call the filterTerm function
     status() {
       this.filterStatus();
     },
+    // when term state change, call the filterTerm function
     term() {
       this.filterTerm(this.term);
     },
@@ -64,6 +66,7 @@ export default {
       });
     },
 
+    // return results for status id, using a simples filter validation
     filterStatus() {
       // reset data
       this.data = this.transactionsData;
@@ -75,18 +78,25 @@ export default {
       this.data = this.data.filter(item => item.status === this.status.id);
     },
 
+    // return results for user search by checking the formatted term and formatted titles of API objects
     filterTerm(term) {
       // reset data
       this.data = this.transactionsData;
 
-      if (term) {
+      if (term && this.data) {
+        const formatTerm = this.formatString(term);
         this.data = this.data.filter(item => {
-          return term
-            .toLowerCase()
-            .split(" ")
-            .every(el => item.title.toLowerCase().includes(el));
+          return formatTerm.split(" ").every(el => this.formatString(item.title).includes(el));
         });
       } else return this.data;
+    },
+
+    // remove accents with regex and format string to lower case
+    formatString(string) {
+      return string
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
     },
 
     // Here, i preferred to use a helper, because in the case of a large product it becomes scalable
@@ -110,6 +120,7 @@ export default {
       }
     },
 
+    // on click, open modal
     clickModal(transaction) {
       this.openModal(transaction);
     },
