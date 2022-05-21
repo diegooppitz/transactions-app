@@ -4,6 +4,7 @@ import "numeral/locales/pt-br";
 
 numeral.locale("pt-br");
 
+// return a monetary formatted number
 export const formatNumber = amount => {
   if (!amount) return 0;
 

@@ -27,6 +27,7 @@ import { getTransactions } from "@/services";
 
 // helpers
 import { formatNumber } from "@/helpers/numbers";
+import { checkStatus } from "@/helpers/checkStatus";
 
 export default {
   name: "ListBody",
@@ -45,11 +46,11 @@ export default {
     return { openModal, status, term };
   },
   watch: {
-    // when status state change, call the filterStatus() for last
+    // when status state change, call the filterStatus() after of filterTerm()
     status() {
       this.organizeFilter("status");
     },
-    // when term state change, call the filterTerm() for last
+    // when term state change, call the filterTerm() after of filterStatus()
     term() {
       this.organizeFilter("term");
     },
@@ -109,20 +110,11 @@ export default {
       return formatNumber(amount);
     },
 
+    // call the checkStatus helper and return the formatted status
     formatStatus(status) {
-      switch (status) {
-        case "created":
-          return "Solicitada";
+      const isChartBar = false;
 
-        case "processing":
-          return "Processando";
-
-        case "processed":
-          return "Concluída";
-
-        default:
-          return "-";
-      }
+      return checkStatus(status, isChartBar);
     },
 
     // on click, open modal
