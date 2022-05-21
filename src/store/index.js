@@ -3,7 +3,10 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     // filters
-    status: "status",
+    status: {
+      id: "status",
+      name: "Todos os status",
+    },
     term: null,
 
     // modal
