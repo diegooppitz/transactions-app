@@ -45,13 +45,13 @@ export default {
     return { openModal, status, term };
   },
   watch: {
-    // when status state change, call the filterTerm function
+    // when status state change, call the filterStatus() for last
     status() {
-      this.filterStatus();
+      this.organizeFilter("status");
     },
-    // when term state change, call the filterTerm function
+    // when term state change, call the filterTerm() for last
     term() {
-      this.filterTerm(this.term);
+      this.organizeFilter("term");
     },
   },
   mounted() {
@@ -66,25 +66,30 @@ export default {
       });
     },
 
-    // return results for status id, using a simples filter validation
-    filterStatus() {
+    // reset data and organize the filters calls
+    async organizeFilter(filterType) {
       // reset data
       this.data = this.transactionsData;
 
-      // search filter
-      this.data = this.filterTerm(this.term);
+      if (filterType === "term") {
+        await this.filterStatus();
+        this.filterTerm();
+      } else {
+        await this.filterTerm();
+        this.filterStatus();
+      }
+    },
 
+    // return results for status id, using a simples filter validation
+    filterStatus() {
       if (this.status.id === "status" || !this.data) return;
       this.data = this.data.filter(item => item.status === this.status.id);
     },
 
     // return results for user search by checking the formatted term and formatted titles of API objects
-    filterTerm(term) {
-      // reset data
-      this.data = this.transactionsData;
-
-      if (term && this.data) {
-        const formatTerm = this.formatString(term);
+    filterTerm() {
+      if (this.term && this.data) {
+        const formatTerm = this.formatString(this.term);
         this.data = this.data.filter(item => {
           return formatTerm.split(" ").every(el => this.formatString(item.title).includes(el));
         });
