@@ -1,6 +1,6 @@
 <template>
   <div class="list-header">
-    <h1>Transações</h1>
+    <h1 class="lh__title">Últimas transações</h1>
     <div class="lh__content">
       <input v-model="term" type="text" placeholder="Pesquise pelo título" @input="changeTerm" />
       <v-select
@@ -74,9 +74,17 @@ export default {
 
 <style lang="scss" scoped>
 .list-header {
+  .lh__title {
+    margin: 50px 0 30px 0;
+    font-size: 24px;
+  }
   .lh__content {
     display: flex;
     justify-content: center;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
   }
 
   .lh__select {
