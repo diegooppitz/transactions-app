@@ -51,6 +51,7 @@ export default {
     return { modalData };
   },
   methods: {
+    // calls the formatNumber helper and return the formatted monetary amount
     formatAmount(amount) {
       return formatNumber(amount);
     },

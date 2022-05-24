@@ -103,12 +103,13 @@ export default {
         .toLowerCase();
     },
 
-    // Here, i preferred to use a helper, because in the case of a large product it becomes scalable
+    // here, i preferred to use a helper, because in the case of a large product it becomes scalable
+    // calls the formatNumber helper and return the formatted monetary amount
     formatAmount(amount) {
       return formatNumber(amount);
     },
 
-    // call the checkStatus helper and return the formatted status
+    // calls the checkStatus helper and return the formatted status
     formatStatus(status) {
       const isChartBar = false;
 
@@ -144,7 +145,7 @@ export default {
     margin: 0 auto;
 
     @media screen and (max-width: 768px) {
-      width: 90%;
+      width: 85%;
     }
 
     .tl__line {

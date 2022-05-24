@@ -30,6 +30,7 @@ export default {
   },
 
   methods: {
+    // close modal on outside click
     clickCallback(event) {
       if (event.target.classList[0] === "modal") this.closeModal();
     },
