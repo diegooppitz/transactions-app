@@ -1,17 +1,15 @@
 <template>
   <div class="transactions-list">
     <div class="tl__wrapper">
-      <div class="tl__titles">
-        <p class="tl__item-title col-lg">Título</p>
-        <p class="tl__item-title tl__item-desc col-lg">Descrição</p>
-        <p class="tl__item-title col-sm">Status</p>
-        <p class="tl__item-title col-sm">Valor</p>
-      </div>
       <div v-for="(element, index) in data" :key="index" class="tl__line" @click="openModal(element)">
-        <p class="tl__item col-lg">{{ element.title }}</p>
-        <p class="tl__item tl__item-desc col-lg">{{ element.description }}</p>
-        <p class="tl__item col-sm">{{ formatStatus(element.status) }}</p>
-        <p class="tl__item col-sm">{{ formatAmount(element.amount) }}</p>
+        <div class="tl__transaction">
+          <p class="tl__item tl__item-title">{{ element.title }}</p>
+          <p class="tl__item tl__item-desc">{{ element.description }}</p>
+        </div>
+        <div class="tl__item tl__infos">
+          <p class="tl__item tl__value">{{ formatAmount(element.amount) }}</p>
+          <span class="tl__status">{{ formatStatus(element.status) }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -142,69 +140,90 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 70%;
+    width: 60%;
     margin: 0 auto;
 
     @media screen and (max-width: 768px) {
-      width: 95%;
-    }
-
-    .tl__line,
-    .tl__titles {
-      display: flex;
-      justify-content: center;
+      width: 90%;
     }
 
     .tl__line {
+      display: flex;
+      justify-content: center;
       cursor: pointer;
-      margin: 18px 0;
-    }
-
-    .tl__titles {
-      margin: 30px 0 5px 0;
-
-      p {
-        font-weight: 600;
-      }
-    }
-
-    .tl__item-title {
-      font-size: 20px;
+      margin: 5px 0;
 
       @media screen and (max-width: 768px) {
-        font-size: 16px;
+        justify-content: space-around;
       }
     }
 
     .tl__item {
-      font-size: 18px;
-      margin: 0;
+      color: #757680;
+    }
 
+    .tl__item-title {
+      font-weight: 700;
+    }
+
+    .tl__transaction {
+      width: 40%;
+      text-align: left;
+
+      @media screen and (max-width: 768px) {
+        width: 60%;
+      }
+    }
+
+    .tl__title-value {
+      width: 30%;
+      text-align: right;
+    }
+    .tl__title-status {
+      width: 25%;
+      text-align: right;
+    }
+
+    .tl__infos {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+      width: 55%;
+
+      @media screen and (max-width: 768px) {
+        width: 40%;
+        margin: 16px 0;
+        justify-content: flex-end;
+        flex-direction: column;
+      }
+    }
+
+    .tl__value {
+      text-align: right;
+      width: 54%;
+    }
+
+    .tl__status {
+      width: 45%;
+      text-align: right;
+    }
+
+    .tl__value,
+    .tl__status {
+      margin: 16px 0;
+      font-size: 14px;
+
+      @media screen and (max-width: 768px) {
+        font-size: 14px;
+        margin: 5px 0;
+        width: 100%;
+      }
+    }
+
+    .tl__desc {
       @media screen and (max-width: 768px) {
         font-size: 13px;
       }
-    }
-
-    .tl__item-desc {
-      @media screen and (max-width: 768px) {
-        display: none;
-      }
-    }
-  }
-
-  .col-lg {
-    width: 30%;
-
-    @media screen and (max-width: 768px) {
-      width: 32%;
-    }
-  }
-
-  .col-sm {
-    width: 20%;
-
-    @media screen and (max-width: 768px) {
-      width: 32%;
     }
   }
 }
