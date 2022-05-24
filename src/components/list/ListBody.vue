@@ -1,6 +1,6 @@
 <template>
   <div class="transactions-list">
-    <div class="tl__wrapper">
+    <div v-if="!loading" class="tl__wrapper">
       <div v-for="(element, index) in data" :key="index" class="tl__line" @click="openModal(element)">
         <div class="tl__transaction">
           <p class="tl__item tl__item-title">{{ element.title }}</p>
@@ -12,6 +12,7 @@
         </div>
       </div>
     </div>
+    <loader v-show="loading" />
   </div>
 </template>
 
@@ -19,6 +20,7 @@
 // libs
 import { useStore } from "vuex";
 import { computed } from "vue";
+import Loader from "@/components/Loader";
 
 // services
 import { getTransactions } from "@/services";
@@ -29,10 +31,14 @@ import { checkStatus } from "@/helpers/checkStatus";
 
 export default {
   name: "ListBody",
+  components: {
+    Loader,
+  },
   data() {
     return {
       transactionsData: [],
       data: [],
+      loading: false,
     };
   },
   setup() {
@@ -58,11 +64,16 @@ export default {
   },
   methods: {
     fetchData() {
-      getTransactions().then(res => {
-        if (!res || res.status != 200) return;
-        this.transactionsData = res?.data;
-        this.data = res?.data;
-      });
+      this.loading = true;
+      getTransactions()
+        .then(res => {
+          if (!res || res.status != 200) return;
+          this.transactionsData = res?.data;
+          this.data = res?.data;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
 
     // reset data and organize the filters calls
